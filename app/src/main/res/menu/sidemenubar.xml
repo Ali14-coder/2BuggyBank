@@ -33,10 +33,6 @@
         android:title="Currency Convertor" />
 
     <item
-        android:id="@+id/is_settings"
-        android:icon="@drawable/rounded_settings_24"
-        android:title="Settings" />
-    <item
         android:id="@+id/is_logut"
         android:icon="@drawable/baseline_output_24"
         android:title="Logout" />

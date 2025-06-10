@@ -91,11 +91,13 @@ class CreateTransactionFragment : Fragment() {
 //        val btnBackToOne = view.findViewById<Button>(R.id.btnBackToOne)
 //        val btnBackToTwo = view.findViewById<Button>(R.id.BackToTwo)
 
-        // Make date/time fields non-editable
-        listOf(etDate, etStartTime, etEndTime).forEach {
+        listOf(etDate, etStartTime, etEndTime, spPayment, btnAddImage, etDescription).forEach {
+            it.isEnabled = false
             it.isFocusable = false
-            it.isClickable = true
+            it.isFocusableInTouchMode = false
+            it.isClickable = false
         }
+
 
         // Setup spinners
         val types = listOf("Select", "Income", "Expense")
@@ -235,7 +237,12 @@ class CreateTransactionFragment : Fragment() {
                 layoutStepTwo.isEnabled = true
                 layoutStepTwo.isClickable = true
                 layoutStepTwo.isFocusable = true
-
+                listOf(etDate, etStartTime, etEndTime, spPayment).forEach {
+                    it.isEnabled = true
+                    it.isFocusable = true
+                    it.isFocusableInTouchMode = true
+                    it.isClickable = true
+                }
                 scrollView.post {
                     scrollView.smoothScrollTo(0,layoutStepTwo.top)
                 }
@@ -297,7 +304,12 @@ class CreateTransactionFragment : Fragment() {
                 layoutStepThree.isEnabled = true
                 layoutStepThree.isClickable = true
                 layoutStepThree.isFocusable = true
-
+                listOf(btnAddImage, etDescription).forEach {
+                    it.isEnabled = true
+                    it.isFocusable = true
+                    it.isFocusableInTouchMode = true
+                    it.isClickable = true
+                }
                 scrollView.post {
                     scrollView.smoothScrollTo(0, layoutStepThree.top)
                 }
@@ -504,13 +516,23 @@ class CreateTransactionFragment : Fragment() {
     }
 
     private fun takePhotoFromCamera() {
-        val photoFile = createImageFile() ?: return
-        imageUri = FileProvider.getUriForFile(
-            requireContext(),
-            "${requireContext().packageName}.fileprovider",
-            photoFile
-        )
-        cameraLauncher.launch(imageUri)
+//        val photoFile = createImageFile() ?: return
+//        imageUri = FileProvider.getUriForFile(
+//            requireContext(),
+//            "${requireContext().packageName}.fileprovider",
+//            photoFile
+//        )
+//        cameraLauncher.launch(imageUri)
+        val photoFile = createImageFile()
+        photoFile?.let {
+            imageUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                it
+            )
+
+            cameraLauncher.launch(imageUri)
+        }
     }
 
     private fun createImageFile(): File? {

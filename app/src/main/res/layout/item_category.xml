@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:background="@drawable/bg_category_chip">
+    android:background="@drawable/rounded_card_bg">
 
     <TextView
         android:id="@+id/categoryNameTextView1"
@@ -26,7 +26,8 @@
         android:id="@+id/deleteButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_delete"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Delete"
-        android:background="?attr/selectableItemBackgroundBorderless" />
+
+        android:src="@android:drawable/ic_menu_delete" />
 </LinearLayout>

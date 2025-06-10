@@ -24,12 +24,12 @@
 
     <ScrollView
         android:id="@+id/scrollCategoryButtons"
-        android:layout_width="356dp"
-        android:layout_height="164dp"
+        android:layout_width="361dp"
+        android:layout_height="135dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:contentDescription="Scroll view"
         android:background="@drawable/bg_dashed_border"
+        android:contentDescription="Scroll view"
         app:layout_constraintBottom_toTopOf="@+id/txtAddCategoriesHeading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
@@ -40,6 +40,7 @@
             android:id="@+id/layoutCategoryButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_card_bg"
             android:orientation="vertical"
             android:padding="8dp" />
     </ScrollView>
@@ -161,7 +162,7 @@
         android:fontFamily="@font/chakra_petch"
         android:text=""
         android:textAllCaps="true"
-        android:textSize="22sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/btnSetMax"
         app:layout_constraintStart_toEndOf="@+id/txtMaximumHeading" />
 
@@ -171,15 +172,14 @@
         android:layout_height="33dp"
         android:layout_marginTop="120dp"
         android:fontFamily="@font/chakra_petch"
+        android:gravity="center"
         android:text="CATEGORIES"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/scrollCategoryButtons"
-        app:layout_constraintTop_toBottomOf="@+id/txtSetBudget"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSetBudget"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 

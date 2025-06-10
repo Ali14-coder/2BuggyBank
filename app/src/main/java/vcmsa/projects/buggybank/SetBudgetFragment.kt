@@ -57,7 +57,7 @@ class SetBudgetFragment : Fragment() {
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
-                txtSeekValue.text = "R$${progress}"
+                txtSeekValue.text = "R${progress}"
             }
 
             override fun onStartTrackingTouch(sb: SeekBar?) {}
@@ -117,7 +117,7 @@ class SetBudgetFragment : Fragment() {
                             val otherBtn = layoutCategoryButtons.getChildAt(i) as Button
                             otherBtn.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
                         }
-                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.holo_green_light))
+                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
                     }
 
                     layoutCategoryButtons.addView(button)
