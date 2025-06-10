@@ -104,7 +104,7 @@
         android:layout_marginBottom="124dp"
         android:fontFamily="@font/chakra_petch_bold"
         android:text="Set"
-        android:backgroundTint="@color/light_green"
+        android:backgroundTint="@color/dark_green"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp"
