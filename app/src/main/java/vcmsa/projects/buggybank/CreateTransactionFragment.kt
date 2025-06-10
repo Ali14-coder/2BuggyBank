@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,6 +45,7 @@ class CreateTransactionFragment : Fragment() {
     private lateinit var imagePreview: ImageView
     private var imageUri: Uri? = null
 
+    private val storage = Firebase.storage.reference
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             imageUri = it
@@ -50,11 +53,30 @@ class CreateTransactionFragment : Fragment() {
         }
     }
 
-    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-        if (success && imageUri != null) {
-            imagePreview.setImageURI(imageUri)
+    private val requestCameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                takePhoto()
+            } else {
+                Toast.makeText(requireContext(), "Camera permission is required to take photos", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success && imageUri != null) {
+                imagePreview.setImageURI(imageUri)
+                val filename = UUID.randomUUID().toString()
+                val imageRef = storage.child("images/$filename")
+                imageRef.putFile(imageUri!!).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        imageRef.downloadUrl.addOnCompleteListener { uri ->
+                            imageUri = uri.result
+                        }
+                    }
+                }
+            }
+
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -508,21 +530,29 @@ class CreateTransactionFragment : Fragment() {
             .setTitle("Add Image")
             .setItems(options) { _, which ->
                 when (which) {
-                    0 -> takePhotoFromCamera()
-                    1 -> galleryLauncher.launch("image/*")
+                    0 -> {
+                        // Check for camera permission
+                        if (androidx.core.content.ContextCompat.checkSelfPermission(
+                                requireContext(),
+                                android.Manifest.permission.CAMERA
+                            ) != android.content.pm.PackageManager.PERMISSION_GRANTED
+                        ) {
+                            requestCameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+                        } else {
+                            takePhoto()
+                        }
+                    }
+                    1 -> pickFromGallery()
                 }
-            }
-            .show()
+            }.show()
     }
 
-    private fun takePhotoFromCamera() {
-//        val photoFile = createImageFile() ?: return
-//        imageUri = FileProvider.getUriForFile(
-//            requireContext(),
-//            "${requireContext().packageName}.fileprovider",
-//            photoFile
-//        )
-//        cameraLauncher.launch(imageUri)
+
+    private fun pickFromGallery() {
+        galleryLauncher.launch("image/*")
+    }
+
+    private fun takePhoto() {
         val photoFile = createImageFile()
         photoFile?.let {
             imageUri = FileProvider.getUriForFile(
@@ -538,11 +568,16 @@ class CreateTransactionFragment : Fragment() {
     private fun createImageFile(): File? {
         return try {
             val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val fileName = "JPEG_$timestamp"
-            val storageDir = requireContext().cacheDir
-            File.createTempFile(fileName, ".jpg", storageDir)
+            val storageDir = File(requireContext().filesDir, "Receipt_images")
+            if (!storageDir.exists()) storageDir.mkdirs()
+
+            val photoFile = File.createTempFile("IMG_$timestamp", ".jpg", storageDir)
+
+            Log.d("DEBUG", "File exists: ${photoFile.exists()} at ${photoFile.absolutePath}")
+
+            photoFile
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Failed to create image file", Toast.LENGTH_SHORT).show()
+            e.printStackTrace()
             null
         }
     }
