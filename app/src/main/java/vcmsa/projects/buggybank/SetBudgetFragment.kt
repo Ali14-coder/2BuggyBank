@@ -117,7 +117,7 @@ class SetBudgetFragment : Fragment() {
                             val otherBtn = layoutCategoryButtons.getChildAt(i) as Button
                             otherBtn.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
                         }
-                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
+                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_green))
                     }
 
                     layoutCategoryButtons.addView(button)
